@@ -1,0 +1,44 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "[Docker] x86 Debug",
+            "type": "shell",
+            "command": "cd /parking_app/build/x86; export MAZU_ARCH=x86; cmake -DCMAKE_BUILD_TYPE=Debug ../..; make -j3",
+            "group": "build",
+            "problemMatcher": []
+        },
+
+        {
+            "label": "[Docker] x86 Release",
+            "type": "shell",
+            "command": "cd /parking_app/build/x86; export MAZU_ARCH=x86; cmake -DCMAKE_BUILD_TYPE=Release ../..",
+            "group": "build",
+            "problemMatcher": []
+        },
+
+        {
+            "label": "[Docker] aarc64 Debug",
+            "type": "shell",
+            "command": "cd /parking_app/build/aarch64; export MAZU_ARCH=aarch64; cmake -DCMAKE_BUILD_TYPE=Debug ../..; make -j3",
+            "group": "build",
+            "problemMatcher": []
+        },
+
+        {
+            "label": "[Docker] LogFile Clean",
+            "type": "shell",
+            "command": "cd /parking_app/log; rm -r ./*",
+            "group": "build",
+            "problemMatcher": []
+        }
+
+        // {
+        //     "label": "[Docker] x86 Clean",
+        //     "type": "shell",
+        //     "command": "cd /parking_app/build/x86; rm -rf ./*",
+        //     "group": "build",
+        //     "problemMatcher": []
+        // }
+    ]
+}

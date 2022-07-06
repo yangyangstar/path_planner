@@ -3,27 +3,25 @@
 using namespace HybridAStar;
 
 
-//###################################################
-//                                         CLEAR PATH
-//###################################################
-
+/**
+ * @brief CLEAR PATH
+ * 
+ */
 void Path::clear() {
   Node3D node;
   path.poses.clear();
   pathNodes.markers.clear();
   pathVehicles.markers.clear();
-  addNode(node, 0);
-  addVehicle(node, 1);
-  publishPath();
-  publishPathNodes();
-  publishPathVehicles();
+  AddNode(node, 0);
+  AddVehicle(node, 1);
+  PublishPath();
+  PublishPathNodes();
+  PublishPathVehicles();
 }
 
-////###################################################
-////                                         TRACE PATH
-////###################################################
-//// __________
-//// TRACE PATH
+/**
+ * @brief TRACE PATH
+ */
 //void Path::tracePath(const Node3D* node, int i) {
 //  if (i == 0) {
 //    path.header.stamp = ros::Time::now();
@@ -31,37 +29,41 @@ void Path::clear() {
 
 //  if (node == nullptr) { return; }
 
-//  addSegment(node);
-//  addNode(node, i);
+//  AddSegment(node);
+//  AddNode(node, i);
 //  i++;
-//  addVehicle(node, i);
+//  AddVehicle(node, i);
 //  i++;
 
 //  tracePath(node->getPred(), i);
 //}
 
-//###################################################
-//                                         TRACE PATH
-//###################################################
-// __________
-// TRACE PATH
-void Path::updatePath(const std::vector<Node3D>& nodePath) {
+/**
+ * @brief TRACE PATH
+ * 
+ * @param nodePath 
+ */
+void Path::UpdatePath(const std::vector<Node3D>& nodePath) {
   path.header.stamp = ros::Time::now();
   int k = 0;
 
   for (size_t i = 0; i < nodePath.size(); ++i) {
-    addSegment(nodePath[i]);
-    addNode(nodePath[i], k);
+    AddSegment(nodePath[i]);
+    AddNode(nodePath[i], k);
     k++;
-    addVehicle(nodePath[i], k);
+    AddVehicle(nodePath[i], k);
     k++;
   }
 
   return;
 }
-// ___________
-// ADD SEGMENT
-void Path::addSegment(const Node3D& node) {
+
+/**
+ * @brief add segment
+ * 
+ * @param node 
+ */
+void Path::AddSegment(const Node3D& node) {
   geometry_msgs::PoseStamped vertex;
   vertex.pose.position.x = node.getX() * Constants::cellSize;
   vertex.pose.position.y = node.getY() * Constants::cellSize;
@@ -73,9 +75,13 @@ void Path::addSegment(const Node3D& node) {
   path.poses.push_back(vertex);
 }
 
-// ________
-// ADD NODE
-void Path::addNode(const Node3D& node, int i) {
+/**
+ * @brief add node
+ * 
+ * @param node 
+ * @param i 
+ */
+void Path::AddNode(const Node3D& node, int i) {
   visualization_msgs::Marker pathNode;
 
   // delete all previous markers
@@ -92,7 +98,7 @@ void Path::addNode(const Node3D& node, int i) {
   pathNode.scale.z = 0.1;
   pathNode.color.a = 1.0;
 
-  if (smoothed) {
+  if (is_smoothed_) {
     pathNode.color.r = Constants::pink.red;
     pathNode.color.g = Constants::pink.green;
     pathNode.color.b = Constants::pink.blue;
@@ -107,7 +113,7 @@ void Path::addNode(const Node3D& node, int i) {
   pathNodes.markers.push_back(pathNode);
 }
 
-void Path::addVehicle(const Node3D& node, int i) {
+void Path::AddVehicle(const Node3D& node, int i) {
   visualization_msgs::Marker pathVehicle;
 
   // delete all previous markersg
@@ -124,18 +130,18 @@ void Path::addVehicle(const Node3D& node, int i) {
   pathVehicle.scale.z = 1;
   pathVehicle.color.a = 0.1;
 
-  if (smoothed) {
+  if (is_smoothed_) {
     pathVehicle.color.r = Constants::orange.red;
     pathVehicle.color.g = Constants::orange.green;
     pathVehicle.color.b = Constants::orange.blue;
   } else {
-    pathVehicle.color.r = Constants::teal.red;
-    pathVehicle.color.g = Constants::teal.green;
-    pathVehicle.color.b = Constants::teal.blue;
+    pathVehicle.color.r = Constants::steelblue.red;
+    pathVehicle.color.g = Constants::steelblue.green;
+    pathVehicle.color.b = Constants::steelblue.blue;
   }
 
   pathVehicle.pose.position.x = node.getX() * Constants::cellSize;
   pathVehicle.pose.position.y = node.getY() * Constants::cellSize;
-  pathVehicle.pose.orientation = tf::createQuaternionMsgFromYaw(node.getT());
+  pathVehicle.pose.orientation = tf::createQuaternionMsgFromYaw(node.getPhi());
   pathVehicles.markers.push_back(pathVehicle);
 }

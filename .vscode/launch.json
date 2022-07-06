@@ -1,0 +1,403 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Launch Localization App",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/parking_app/build/x86/src/localization/parking_localization_app",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/log", // log file will be saved to current working directory
+            "environment": [
+                {
+                    "name": "CYBER_PATH",
+                    "value": "/integration"
+                },
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/integration"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+
+        {
+            "name": "(gdb) Launch Env App",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/parking_app/build/x86/src/env_fusion/parking_env_app",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/log", // log file will be saved to current working directory
+            "environment": [
+                {
+                    "name": "CYBER_PATH",
+                    "value": "/integration"
+                },
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/integration"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+
+        {
+            "name": "(gdb) Launch Planning App",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/parking_app/build/x86/src/planning/parking_planning_app",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/log", // log file will be saved to current working directory
+            "environment": [
+                {
+                    "name": "CYBER_PATH",
+                    "value": "/integration"
+                },
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/integration"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+
+        {
+            "name": "(gdb) Launch Parking_Debug_UI App",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/parking_app/build/x86/src/debug_ui/parking_debug_ui_app",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/log", // log file will be saved to current working directory
+            "environment": [
+                {
+                    "name": "CYBER_PATH",
+                    "value": "/integration"
+                },
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/integration"
+                // },
+                // {
+                //     "name": "CYBER_IP",
+                //     "value":"10.42.0.90"
+                }
+
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+
+        {
+            "name": "(gdb) Launch Mock_Vehicle10ms App",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/parking_app/build/x86/mock_veh10ms",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/log", // log file will be saved to current working directory
+            "environment": [
+                {
+                    "name": "CYBER_PATH",
+                    "value": "/integration"
+                },
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/integration"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+
+        {
+            "name": "(gdb) Launch Mock_Odometry App",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/parking_app/build/x86/src/debug_ui/tool/mock_odometry",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/log", // log file will be saved to current working directory
+            "environment": [
+                {
+                    "name": "CYBER_PATH",
+                    "value": "/integration"
+                },
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/integration/lib"
+                },
+                {
+                    "name": "NIODDS_MONITOR",
+                    "value": "true"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+
+        {
+            "name": "(gdb) Launch Mock_Vehicle_Model App",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/parking_app/build/x86/src/debug_ui/simulator/mock_vehicle_model",
+            "args": [
+                "/parking_app/data/vehicle_in-vehicle_10ms.bin"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/log", // log file will be saved to current working directory
+            "environment": [
+                {
+                    "name": "CYBER_PATH",
+                    "value": "/integration"
+                },
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/integration"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+
+        {
+            "name": "(gdb) Launch Process App",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/parking_app/build/x86/src/process/parking_process_app",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/log", // log file will be saved to current working directory
+            "environment": [
+                {
+                    "name": "CYBER_PATH",
+                    "value": "/integration"
+                },
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/integration"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+
+        {
+            "name": "(gdb) Launch Parking Control App",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/parking_app/build/x86/src/control/parking_control_app",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/log", // log file will be saved to current working directory
+            "environment": [
+                {
+                    "name": "CYBER_PATH",
+                    "value": "/integration"
+                },
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/integration"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+
+        {
+            "name": "(gdb) Launch Mock VehicleAllSensorIn",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/parking_app/build/x86/src/debug_ui/tool/mock_vehicle_sensor_in",
+            "args": [
+                "${SIM_ROOT}common-vehicle_in-vehicle_10ms.pb.dat",
+                "${SIM_ROOT}common-vehicle_in-vehicle_50ms.pb.dat",
+                "${SIM_ROOT}common-perception-svc_perception.pb.dat",
+                "${SIM_ROOT}np-apps-parking-par_objmap.pb.dat",
+                "${SIM_ROOT}np-apps-parking-par_location.pb.dat",
+                "1.0"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/log", // log file directory
+            "environment": [
+                {
+                    "name": "CYBER_PATH",
+                    "value": "/integration"
+                },
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/integration"
+                },
+                {
+                    "name": "SIM_ROOT",
+                    "value": "/parking_app/nt2_psap_data/record/"
+                    // "value": "/parking_app/replay_tools/data/1126/03/"
+                    // "value": "/parking_app/replay_tools/data/1124/01UssFP/"
+                    // "value": "/parking_app/replay_tools/data/1124/02objmap/"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+
+        {
+            "name": "(gdb) Launch Replay Parking Proto",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/parking_app/build/x86/src/debug_ui/tool/replay_parking_proto_od_plus",
+            "args": [
+                "/parking_app/tmp/record/common-vehicle_in-vehicle_10ms.pb.dat",
+                "/parking_app/tmp/record/common-vehicle_in-vehicle_50ms.pb.dat",
+                "/parking_app/tmp/record/common-perception-svc_perception.pb.dat",
+                "/parking_app/tmp/record/np-apps-parking-par_objmap.pb.dat",
+                "/parking_app/tmp/record/np-apps-parking-par_location.pb.dat",
+                "/parking_app/tmp/record/np-apps-parking-par_state_machine.pb.dat",
+                "/parking_app/tmp/record/np-apps-parking-par_planning.pb.dat",
+                "/parking_app/tmp/record/np-apps-parking-par_collision_dst.pb.dat",
+                "/parking_app/tmp/record/np-apps-parking-par_semantic_map.pb.dat",
+                "/parking_app/tmp/record/np-apps-parking-par_semantic_map.pb.dat1",
+                "/parking_app/tmp/record/np-apps-parking-par_semantic_map.pb.dat1",
+                "/parking_app/tmp/record/np-apps-parking-par_semantic_map.pb.dat1",
+                "2600.0",
+                "10.0"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/log", // log file directory
+            "environment": [
+                {
+                    "name": "CYBER_PATH",
+                    "value": "/integration"
+                },
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/integration/lib"
+                },
+                {
+                    "name": "NIODDS_MONITOR",
+                    "value": "true"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+
+    ],
+        "compounds": [
+        {
+            "name": "Test PSAP Planning",
+            "configurations": [
+                "(gdb) Launch Localization App",
+                "(gdb) Launch Parking_Debug_UI App",
+                "(gdb) Launch Env App",
+                "(gdb) Launch Planning App",
+                "(gdb) Launch Mock_Vehicle_Model App",
+                "(gdb) Launch Parking Control App"
+            ]
+        },
+        {
+            "name": "Test SAPA Planning",
+            "configurations": [
+                // "(gdb) Launch Localization App",
+                "(gdb) Launch Parking_Debug_UI App",
+                "(gdb) Launch Env App",
+                "(gdb) Launch Planning App",
+                "(gdb) Launch Mock_Vehicle_Model App",
+                "(gdb) Launch Process App",
+                // "(gdb) Launch Parking Control App"
+            ]
+        },
+        {
+            "name": "Replay",
+            "configurations": [
+                "(gdb) Launch Parking_Debug_UI App",
+                "(gdb) Launch Replay Parking Proto"
+            ]
+        },
+    ]
+}

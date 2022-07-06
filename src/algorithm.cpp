@@ -5,7 +5,7 @@
 using namespace HybridAStar;
 
 float aStar(Node2D& start, Node2D& goal, Node2D* nodes2D, int width, int height, CollisionDetection& configurationSpace, Visualize& visualization);
-void updateH(Node3D& start, const Node3D& goal, Node2D* nodes2D, float* dubinsLookup, int width, int height, CollisionDetection& configurationSpace, Visualize& visualization);
+void UpdateH(Node3D& start, const Node3D& goal, Node2D* nodes2D, float* dubinsLookup, int width, int height, CollisionDetection& configurationSpace, Visualize& visualization);
 Node3D* dubinsShot(Node3D& start, const Node3D& goal, CollisionDetection& configurationSpace);
 
 //###################################################
@@ -53,14 +53,14 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
   typedef boost::heap::binomial_heap<Node3D*,
           boost::heap::compare<CompareNodes>
           > priorityQueue;
-  priorityQueue O;
+  priorityQueue open_pq;
 
   // update h value
-  updateH(start, goal, nodes2D, dubinsLookup, width, height, configurationSpace, visualization);
+  UpdateH(start, goal, nodes2D, dubinsLookup, width, height, configurationSpace, visualization);
   // mark start as open
   start.open();
   // push on priority queue aka open list
-  O.push(&start);
+  open_pq.push(&start);
   iPred = start.setIdx(width, height);
   nodes3D[iPred] = start;
 
@@ -70,8 +70,8 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
 
   // float max = 0.f;
 
-  // continue until O empty
-  while (!O.empty()) {
+  // continue until open_pq empty
+  while (!open_pq.empty()) {
 
     //    // DEBUG
     //    Node3D* pre = nullptr;
@@ -79,7 +79,7 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
 
     //    std::cout << "\t--->>>" << std::endl;
 
-    //    for (priorityQueue::ordered_iterator it = O.ordered_begin(); it != O.ordered_end(); ++it) {
+    //    for (priorityQueue::ordered_iterator it = open_pq.ordered_begin(); it != open_pq.ordered_end(); ++it) {
     //      succ = (*it);
     //      std::cout << "VAL"
     //                << " | C:" << succ->getC()
@@ -87,7 +87,7 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
     //                << " | y:" << succ->getY()
     //                << " | t:" << helper::toDeg(succ->getT())
     //                << " | i:" << succ->getIdx()
-    //                << " | O:" << succ->isOpen()
+    //                << " | open_pq:" << succ->isOpen()
     //                << " | pred:" << succ->getPred()
     //                << std::endl;
 
@@ -100,7 +100,7 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
     //                    << " | y:" << pre->getY()
     //                    << " | t:" << helper::toDeg(pre->getT())
     //                    << " | i:" << pre->getIdx()
-    //                    << " | O:" << pre->isOpen()
+    //                    << " | open_pq:" << pre->isOpen()
     //                    << " | pred:" << pre->getPred()
     //                    << std::endl;
     //          std::cout << "SCC"
@@ -109,7 +109,7 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
     //                    << " | y:" << succ->getY()
     //                    << " | t:" << helper::toDeg(succ->getT())
     //                    << " | i:" << succ->getIdx()
-    //                    << " | O:" << succ->isOpen()
+    //                    << " | open_pq:" << succ->isOpen()
     //                    << " | pred:" << succ->getPred()
     //                    << std::endl;
 
@@ -123,7 +123,7 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
     //    }
 
     // pop node with lowest cost from priority queue
-    nPred = O.top();
+    nPred = open_pq.top();
     // set index
     iPred = nPred->setIdx(width, height);
     iterations++;
@@ -140,7 +140,7 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
     // if there exists a pointer this node has already been expanded
     if (nodes3D[iPred].isClosed()) {
       // pop node from the open list and start with a fresh node
-      O.pop();
+      open_pq.pop();
       continue;
     }
     // _________________
@@ -149,7 +149,7 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
       // add node to closed list
       nodes3D[iPred].close();
       // remove node from open list
-      O.pop();
+      open_pq.pop();
 
       // _________
       // GOAL TEST
@@ -195,7 +195,7 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
               if (!nodes3D[iSucc].isOpen() || newG < nodes3D[iSucc].getG() || iPred == iSucc) {
 
                 // calculate H value
-                updateH(*nSucc, goal, nodes2D, dubinsLookup, width, height, configurationSpace, visualization);
+                UpdateH(*nSucc, goal, nodes2D, dubinsLookup, width, height, configurationSpace, visualization);
 
                 // if the successor is in the same cell but the C value is larger
                 if (iPred == iSucc && nSucc->getC() > nPred->getC() + Constants::tieBreaker) {
@@ -214,7 +214,7 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
                 // put successor on open list
                 nSucc->open();
                 nodes3D[iSucc] = *nSucc;
-                O.push(&nodes3D[iSucc]);
+                open_pq.push(&nodes3D[iSucc]);
                 delete nSucc;
               } else { delete nSucc; }
             } else { delete nSucc; }
@@ -224,7 +224,7 @@ Node3D* Algorithm::hybridAStar(Node3D& start,
     }
   }
 
-  if (O.empty()) {
+  if (open_pq.empty()) {
     return nullptr;
   }
 
@@ -255,13 +255,13 @@ float aStar(Node2D& start,
   ros::Duration d(0.001);
 
   boost::heap::binomial_heap<Node2D*,
-        boost::heap::compare<CompareNodes>> O;
+        boost::heap::compare<CompareNodes>> open_pq;
   // update h value
-  start.updateH(goal);
+  start.UpdateH(goal);
   // mark start as open
   start.open();
   // push on priority queue
-  O.push(&start);
+  open_pq.push(&start);
   iPred = start.setIdx(width);
   nodes2D[iPred] = start;
 
@@ -269,10 +269,10 @@ float aStar(Node2D& start,
   Node2D* nPred;
   Node2D* nSucc;
 
-  // continue until O empty
-  while (!O.empty()) {
+  // continue until open_pq empty
+  while (!open_pq.empty()) {
     // pop node with lowest cost from priority queue
-    nPred = O.top();
+    nPred = open_pq.top();
     // set index
     iPred = nPred->setIdx(width);
 
@@ -281,7 +281,7 @@ float aStar(Node2D& start,
     // if there exists a pointer this node has already been expanded
     if (nodes2D[iPred].isClosed()) {
       // pop node from the open list and start with a fresh node
-      O.pop();
+      open_pq.pop();
       continue;
     }
     // _________________
@@ -299,7 +299,7 @@ float aStar(Node2D& start,
       }
 
       // remove node from open list
-      O.pop();
+      open_pq.pop();
 
       // _________
       // GOAL TEST
@@ -328,11 +328,11 @@ float aStar(Node2D& start,
             // if successor not on open list or g value lower than before put it on open list
             if (!nodes2D[iSucc].isOpen() || newG < nodes2D[iSucc].getG()) {
               // calculate the H value
-              nSucc->updateH(goal);
+              nSucc->UpdateH(goal);
               // put successor on open list
               nSucc->open();
               nodes2D[iSucc] = *nSucc;
-              O.push(&nodes2D[iSucc]);
+              open_pq.push(&nodes2D[iSucc]);
               delete nSucc;
             } else { delete nSucc; }
           } else { delete nSucc; }
@@ -348,7 +348,7 @@ float aStar(Node2D& start,
 //###################################################
 //                                         COST TO GO
 //###################################################
-void updateH(Node3D& start, const Node3D& goal, Node2D* nodes2D, float* dubinsLookup, int width, int height, CollisionDetection& configurationSpace, Visualize& visualization) {
+void UpdateH(Node3D& start, const Node3D& goal, Node2D* nodes2D, float* dubinsLookup, int width, int height, CollisionDetection& configurationSpace, Visualize& visualization) {
   float dubinsCost = 0;
   float reedsSheppCost = 0;
   float twoDCost = 0;
@@ -408,9 +408,9 @@ void updateH(Node3D& start, const Node3D& goal, Node2D* nodes2D, float* dubinsLo
     State* dbStart = (State*)dubinsPath.allocState();
     State* dbEnd = (State*)dubinsPath.allocState();
     dbStart->setXY(start.getX(), start.getY());
-    dbStart->setYaw(start.getT());
+    dbStart->setYaw(start.getPhi());
     dbEnd->setXY(goal.getX(), goal.getY());
-    dbEnd->setYaw(goal.getT());
+    dbEnd->setYaw(goal.getPhi());
     dubinsCost = dubinsPath.distance(dbStart, dbEnd);
   }
 
@@ -421,9 +421,9 @@ void updateH(Node3D& start, const Node3D& goal, Node2D* nodes2D, float* dubinsLo
     State* rsStart = (State*)reedsSheppPath.allocState();
     State* rsEnd = (State*)reedsSheppPath.allocState();
     rsStart->setXY(start.getX(), start.getY());
-    rsStart->setYaw(start.getT());
+    rsStart->setYaw(start.getPhi());
     rsEnd->setXY(goal.getX(), goal.getY());
-    rsEnd->setYaw(goal.getT());
+    rsEnd->setYaw(goal.getPhi());
     reedsSheppCost = reedsSheppPath.distance(rsStart, rsEnd);
     //    ros::Time t1 = ros::Time::now();
     //    ros::Duration d(t1 - t0);
@@ -462,9 +462,9 @@ void updateH(Node3D& start, const Node3D& goal, Node2D* nodes2D, float* dubinsLo
 //###################################################
 Node3D* dubinsShot(Node3D& start, const Node3D& goal, CollisionDetection& configurationSpace) {
   // start
-  double q0[] = { start.getX(), start.getY(), start.getT() };
+  double q0[] = { start.getX(), start.getY(), start.getPhi() };
   // goal
-  double q1[] = { goal.getX(), goal.getY(), goal.getT() };
+  double q1[] = { goal.getX(), goal.getY(), goal.getPhi() };
   // initialize the path
   DubinsPath path;
   // calculate the path

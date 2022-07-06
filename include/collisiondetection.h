@@ -20,7 +20,7 @@ inline void getConfiguration(const Node2D* node, float& x, float& y, float& t) {
 inline void getConfiguration(const Node3D* node, float& x, float& y, float& t) {
   x = node->getX();
   y = node->getY();
-  t = node->getT();
+  t = node->getPhi();
 }
 }
 /*!

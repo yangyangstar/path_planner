@@ -1,3 +1,13 @@
+/**
+ * @file node3d.h
+ * @author Karl Kurzer
+ * @brief 
+ * @version 0.1
+ * @date 2022-04-15
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #ifndef NODE3D_H
 #define NODE3D_H
 
@@ -6,73 +16,71 @@
 #include "constants.h"
 #include "helper.h"
 namespace HybridAStar {
-/*!
-   \brief A three dimensional node class that is at the heart of the algorithm.
-
-   Each node has a unique configuration (x, y, theta) in the configuration space C.
-*/
+/**
+ * @brief A three dimensional node class that is at the heart of the algorithm.
+ * Each node has a unique configuration (x, y, theta) in the configuration space C.
+ */
 class Node3D {
  public:
-
   /// The default constructor for 3D array initialization
   Node3D(): Node3D(0, 0, 0, 0, 0, nullptr) {}
   /// Constructor for a node with the given arguments
-  Node3D(float x, float y, float t, float g, float h, const Node3D* pred, int prim = 0) {
-    this->x = x;
-    this->y = y;
-    this->t = t;
-    this->g = g;
-    this->h = h;
-    this->pred = pred;
-    this->o = false;
-    this->c = false;
-    this->idx = -1;
-    this->prim = prim;
+  Node3D(float x, float y, float phi, float g, float h, const Node3D* pred, int prim = 0) {
+    x_ = x;
+    y_ = y;
+    phi_ = phi;
+    g_ = g;
+    h_ = h;
+    pred_ = pred;
+    o_ = false;
+    c_ = false;
+    idx_ = -1;
+    prim_ = prim;
   }
 
   // GETTER METHODS
   /// get the x position
-  float getX() const { return x; }
+  float getX() const { return x_; }
   /// get the y position
-  float getY() const { return y; }
+  float getY() const { return y_; }
   /// get the heading theta
-  float getT() const { return t; }
+  float getPhi() const { return phi_; }
   /// get the cost-so-far (real value)
-  float getG() const { return g; }
+  float getG() const { return g_; }
   /// get the cost-to-come (heuristic value)
-  float getH() const { return h; }
+  float getH() const { return h_; }
   /// get the total estimated cost
-  float getC() const { return g + h; }
+  float getC() const { return g_ + h_; }
   /// get the index of the node in the 3D array
-  int getIdx() const { return idx; }
+  int getIdx() const { return idx_; }
   /// get the number associated with the motion primitive of the node
-  int getPrim() const { return prim; }
+  int getPrim() const { return prim_; }
   /// determine whether the node is open
-  bool isOpen() const { return o; }
+  bool isOpen() const { return o_; }
   /// determine whether the node is closed
-  bool isClosed() const { return c; }
+  bool isClosed() const { return c_; }
   /// determine whether the node is open
-  const Node3D* getPred() const { return pred; }
+  const Node3D* getPred() const { return pred_; }
 
   // SETTER METHODS
   /// set the x position
-  void setX(const float& x) { this->x = x; }
+  void setX(const float& x) { x_ = x; }
   /// set the y position
-  void setY(const float& y) { this->y = y; }
+  void setY(const float& y) { y_ = y; }
   /// set the heading theta
-  void setT(const float& t) { this->t = t; }
+  void setT(const float& phi) { phi_ = phi; }
   /// set the cost-so-far (real value)
-  void setG(const float& g) { this->g = g; }
+  void setG(const float& g) { g_ = g; }
   /// set the cost-to-come (heuristic value)
-  void setH(const float& h) { this->h = h; }
+  void setH(const float& h) { h_ = h; }
   /// set and get the index of the node in the 3D grid
-  int setIdx(int width, int height) { this->idx = (int)(t / Constants::deltaHeadingRad) * width * height + (int)(y) * width + (int)(x); return idx;}
+  int setIdx(int width, int height) { idx_ = (int)(phi_ / Constants::deltaHeadingRad) * width * height + (int)(y_) * width + (int)(x_); return idx_;}
   /// open the node
-  void open() { o = true; c = false;}
+  void open() { o_ = true; c_ = false;}
   /// close the node
-  void close() { c = true; o = false; }
+  void close() { c_ = true; o_ = false; }
   /// set a pointer to the predecessor of the node
-  void setPred(const Node3D* pred) { this->pred = pred; }
+  void setPred(const Node3D* pred) { pred_ = pred; }
 
   // UPDATE METHODS
   /// Updates the cost-so-far for the node x' coming from its predecessor. It also discovers the node.
@@ -106,25 +114,26 @@ class Node3D {
 
  private:
   /// the x position
-  float x;
+  float x_;
   /// the y position
-  float y;
+  float y_;
   /// the heading theta
-  float t;
+  float phi_;
   /// the cost-so-far
-  float g;
+  float g_;
   /// the cost-to-go
-  float h;
+  float h_;
   /// the index of the node in the 3D array
-  int idx;
+  int idx_;
   /// the open value
-  bool o;
+  bool o_;
   /// the closed value
-  bool c;
+  bool c_;
   /// the motion primitive of the node
-  int prim;
+  int prim_;
   /// the predecessor pointer
-  const Node3D* pred;
+  const Node3D* pred_;
 };
-}
+
+}  // namespace HybridAStar
 #endif // NODE3D_H

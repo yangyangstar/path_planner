@@ -1,17 +1,18 @@
 #include "visualize.h"
 using namespace HybridAStar;
-//###################################################
-//                                CLEAR VISUALIZATION
-//###################################################
+/**
+ * @brief clear visualization
+ *
+ */
 void Visualize::clear() {
   poses3D.poses.clear();
   poses3Dreverse.poses.clear();
   poses2D.poses.clear();
 
-  // 3D COSTS
+  // 3D costs
   visualization_msgs::MarkerArray costCubes3D;
   visualization_msgs::Marker costCube3D;
-  // CLEAR THE COST HEATMAP
+  // clear the cost heatmap
   costCube3D.header.frame_id = "path";
   costCube3D.header.stamp = ros::Time::now();
   costCube3D.id = 0;
@@ -19,10 +20,10 @@ void Visualize::clear() {
   costCubes3D.markers.push_back(costCube3D);
   pubNodes3DCosts.publish(costCubes3D);
 
-  // 2D COSTS
+  // 2D costs
   visualization_msgs::MarkerArray costCubes2D;
   visualization_msgs::Marker costCube2D;
-  // CLEAR THE COST HEATMAP
+  // clear the cost heatmap
   costCube2D.header.frame_id = "path";
   costCube2D.header.stamp = ros::Time::now();
   costCube2D.id = 0;
@@ -31,9 +32,10 @@ void Visualize::clear() {
   pubNodes2DCosts.publish(costCubes2D);
 }
 
-//###################################################
-//                                    CURRENT 3D NODE
-//###################################################
+/**
+ * @brief current 3D node
+ * @param node
+ */
 void Visualize::publishNode3DPose(Node3D& node) {
   geometry_msgs::PoseStamped pose;
   pose.header.frame_id = "path";
@@ -42,49 +44,49 @@ void Visualize::publishNode3DPose(Node3D& node) {
   pose.pose.position.x = node.getX() * Constants::cellSize;
   pose.pose.position.y = node.getY() * Constants::cellSize;
 
-  //FORWARD
+  // Forward
   if (node.getPrim() < 3) {
-    pose.pose.orientation = tf::createQuaternionMsgFromYaw(node.getT());
-  }
-  //REVERSE
-  else {
-    pose.pose.orientation = tf::createQuaternionMsgFromYaw(node.getT() + M_PI);
+    pose.pose.orientation = tf::createQuaternionMsgFromYaw(node.getPhi());
+  } else {  // Reverse
+    pose.pose.orientation =
+        tf::createQuaternionMsgFromYaw(node.getPhi() + M_PI);
   }
 
-  // PUBLISH THE POSE
+  // publish the pose
   pubNode3D.publish(pose);
 }
 
-//###################################################
-//                              ALL EXPANDED 3D NODES
-//###################################################
+/**
+ * @brief all expanded 3D nodes
+ * @param node
+ */
 void Visualize::publishNode3DPoses(Node3D& node) {
   geometry_msgs::Pose pose;
   pose.position.x = node.getX() * Constants::cellSize;
   pose.position.y = node.getY() * Constants::cellSize;
 
-  //FORWARD
+  // Forward
   if (node.getPrim() < 3) {
-    pose.orientation = tf::createQuaternionMsgFromYaw(node.getT());
+    pose.orientation = tf::createQuaternionMsgFromYaw(node.getPhi());
     poses3D.poses.push_back(pose);
     poses3D.header.stamp = ros::Time::now();
-    // PUBLISH THE POSEARRAY
+    // publish the posearray
     pubNodes3D.publish(poses3D);
   }
-  //REVERSE
+  // Reverse
   else {
-    pose.orientation = tf::createQuaternionMsgFromYaw(node.getT() + M_PI);
+    pose.orientation = tf::createQuaternionMsgFromYaw(node.getPhi() + M_PI);
     poses3Dreverse.poses.push_back(pose);
     poses3Dreverse.header.stamp = ros::Time::now();
-    // PUBLISH THE POSEARRAY
+    // publish the posearray
     pubNodes3Dreverse.publish(poses3Dreverse);
   }
-
 }
 
-//###################################################
-//                                    CURRENT 2D NODE
-//###################################################
+/**
+ * @brief current 2D node
+ * @param node
+ */
 void Visualize::publishNode2DPose(Node2D& node) {
   geometry_msgs::PoseStamped pose;
   pose.header.frame_id = "path";
@@ -94,13 +96,15 @@ void Visualize::publishNode2DPose(Node2D& node) {
   pose.pose.position.y = (node.getY() + 0.5) * Constants::cellSize;
   pose.pose.orientation = tf::createQuaternionMsgFromYaw(0);
 
-  // PUBLISH THE POSE
+  // publish the pose
   pubNode2D.publish(pose);
 }
 
-//###################################################
-//                              ALL EXPANDED 2D NODES
-//###################################################
+/**
+ * @brief all expanded 2D nodes
+ *
+ * @param node
+ */
 void Visualize::publishNode2DPoses(Node2D& node) {
   if (node.isDiscovered()) {
     geometry_msgs::Pose pose;
@@ -110,16 +114,20 @@ void Visualize::publishNode2DPoses(Node2D& node) {
 
     poses2D.poses.push_back(pose);
     poses2D.header.stamp = ros::Time::now();
-    // PUBLISH THE POSEARRAY
+    // publish the posearray
     pubNodes2D.publish(poses2D);
-
   }
 }
 
-//###################################################
-//                                    COST HEATMAP 3D
-//###################################################
-void Visualize::publishNode3DCosts(Node3D* nodes, int width, int height, int depth) {
+/**
+ * @brief cost heatmap 3D
+ * @param nodes
+ * @param width
+ * @param height
+ * @param depth
+ */
+void Visualize::publishNode3DCosts(Node3D* nodes, int width, int height,
+                                   int depth) {
   visualization_msgs::MarkerArray costCubes;
   visualization_msgs::Marker costCube;
 
@@ -137,8 +145,7 @@ void Visualize::publishNode3DCosts(Node3D* nodes, int width, int height, int dep
 
   float values[width * height];
 
-  // ________________________________
-  // DETERMINE THE MAX AND MIN VALUES
+  // determine the max and min values
   for (int i = 0; i < width * height; ++i) {
     values[i] = 1000;
 
@@ -163,8 +170,7 @@ void Visualize::publishNode3DCosts(Node3D* nodes, int width, int height, int dep
     }
   }
 
-  // _______________
-  // PAINT THE CUBES
+  // paint the cubes
   for (int i = 0; i < width * height; ++i) {
     // if a value exists continue
     if (values[i] != 1000) {
@@ -177,7 +183,6 @@ void Visualize::publishNode3DCosts(Node3D* nodes, int width, int height, int dep
       } else {
         costCube.action = 0;
       }
-
 
       costCube.header.frame_id = "path";
       costCube.header.stamp = ros::Time::now();
@@ -194,7 +199,8 @@ void Visualize::publishNode3DCosts(Node3D* nodes, int width, int height, int dep
       costCube.color.b = blue;
       // center in cell +0.5
       costCube.pose.position.x = (i % width + 0.5) * Constants::cellSize;
-      costCube.pose.position.y = ((i / width) % height + 0.5) * Constants::cellSize;
+      costCube.pose.position.y =
+          ((i / width) % height + 0.5) * Constants::cellSize;
       costCubes.markers.push_back(costCube);
     }
   }
@@ -204,13 +210,16 @@ void Visualize::publishNode3DCosts(Node3D* nodes, int width, int height, int dep
     std::cout << count << " 3D nodes expanded " << std::endl;
   }
 
-  // PUBLISH THE COSTCUBES
+  // publish the costcubes
   pubNodes3DCosts.publish(costCubes);
 }
 
-//###################################################
-//                                    COST HEATMAP 2D
-//###################################################
+/**
+ * @brief cost heatmap 2D
+ * @param nodes a pointer to Node2D
+ * @param width
+ * @param height
+ */
 void Visualize::publishNode2DCosts(Node2D* nodes, int width, int height) {
   visualization_msgs::MarkerArray costCubes;
   visualization_msgs::Marker costCube;
@@ -228,8 +237,7 @@ void Visualize::publishNode2DCosts(Node2D* nodes, int width, int height) {
 
   float values[width * height];
 
-  // ________________________________
-  // DETERMINE THE MAX AND MIN VALUES
+  // determine the max and min values
   for (int i = 0; i < width * height; ++i) {
     values[i] = 1000;
 
@@ -238,15 +246,18 @@ void Visualize::publishNode2DCosts(Node2D* nodes, int width, int height) {
       values[i] = nodes[i].getG();
 
       // set a new minimum
-      if (values[i] > 0 && values[i] < min) { min = values[i]; }
+      if (values[i] > 0 && values[i] < min) {
+        min = values[i];
+      }
 
       // set a new maximum
-      if (values[i] > 0 && values[i] > max) { max = values[i]; }
+      if (values[i] > 0 && values[i] > max) {
+        max = values[i];
+      }
     }
   }
 
-  // _______________
-  // PAINT THE CUBES
+  // paint the cubes
   for (int i = 0; i < width * height; ++i) {
     // if a value exists continue
     if (nodes[i].isDiscovered()) {
@@ -259,7 +270,6 @@ void Visualize::publishNode2DCosts(Node2D* nodes, int width, int height) {
       } else {
         costCube.action = 0;
       }
-
 
       costCube.header.frame_id = "path";
       costCube.header.stamp = ros::Time::now();
@@ -276,7 +286,8 @@ void Visualize::publishNode2DCosts(Node2D* nodes, int width, int height) {
       costCube.color.b = blue;
       // center in cell +0.5
       costCube.pose.position.x = (i % width + 0.5) * Constants::cellSize;
-      costCube.pose.position.y = ((i / width) % height + 0.5) * Constants::cellSize;
+      costCube.pose.position.y =
+          ((i / width) % height + 0.5) * Constants::cellSize;
       costCubes.markers.push_back(costCube);
     }
   }
@@ -286,6 +297,6 @@ void Visualize::publishNode2DCosts(Node2D* nodes, int width, int height) {
     std::cout << count << " 2D nodes expanded " << std::endl;
   }
 
-  // PUBLISH THE COSTCUBES
+  // publish the costcubes
   pubNodes2DCosts.publish(costCubes);
 }

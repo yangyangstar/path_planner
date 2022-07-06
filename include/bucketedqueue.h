@@ -22,7 +22,7 @@ class BucketPrioQueue {
  public:
   //! Standard constructor
   /** Standard constructor. When called for the first time it creates a look up table
-      that maps square distanes to bucket numbers, which might take some time...
+      that maps square distances to bucket numbers, which might take some time...
   */
   BucketPrioQueue();
   //! Checks whether the Queue is empty

@@ -165,6 +165,7 @@ static constexpr color orange = {253.f / 255.f, 151.f / 255.f, 31.f / 255.f};
 static constexpr color pink = {249.f / 255.f, 38.f / 255.f, 114.f / 255.f};
 /// A definition for a color used for visualization
 static constexpr color purple = {174.f / 255.f, 129.f / 255.f, 255.f / 255.f};
+static constexpr color steelblue = {175.f / 255.f, 238.f / 255.f, 238.f / 255.f};
 }
 }
 
